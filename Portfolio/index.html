@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maja — UX Researcherin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAFAFA;
+  --fg: #1F1F1F;
+  --mid: #5A5A5A;
+  --accent: #2E5C8A;
+  --accent-soft: #EAF1F8;
+  --light: #FFFFFF;
+  --border: #E3E3E0;
+}
+* { box-sizing: border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--fg); line-height: 1.75; }
+h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 700; line-height: 1.15; }
+nav {
+  position: fixed; top: 0; left: 0; right: 0; background: rgba(250,250,250,0.96);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border); padding: 20px 6%; display: flex; justify-content: space-between; align-items: center; z-index: 999;
+}
+.nav-logo { font-size: 24px; font-weight: 700; color: var(--fg); text-decoration: none; font-family: 'Playfair Display', serif; }
+.nav-logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+.nav-links a { color: var(--mid); text-decoration: none; font-weight: 500; font-size: 15px; }
+.nav-links a:hover { color: var(--accent); }
+.lang-toggle { padding: 7px 16px; border: 1px solid var(--border); border-radius: 6px; background: var(--light); cursor: pointer; font-weight: 600; font-size: 13px; color: var(--fg); }
+.lang-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.hero { min-height: 88vh; padding: 160px 6% 100px; max-width: 1100px; margin: 0 auto; display: flex; align-items: center; }
+.hero-tag { color: var(--accent); font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 18px; font-size: 14px; }
+.hero h1 { font-size: clamp(32px, 5.5vw, 50px); margin-bottom: 28px; max-width: 760px; }
+.hero p { font-size: 1.1rem; color: var(--mid); max-width: 640px; margin-bottom: 20px; }
+.hero-sub { font-size: 1rem; color: var(--mid); max-width: 640px; margin-bottom: 44px; }
+.hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+.btn { background: var(--accent); color: white; padding: 15px 34px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; font-size: 15px; transition: all .2s; }
+.btn:hover { background: #244a70; transform: translateY(-2px); }
+.btn-ghost { background: transparent; color: var(--fg); padding: 15px 34px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; font-size: 15px; border: 1px solid var(--border); transition: all .2s; }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+section { padding: 110px 6%; max-width: 1100px; margin: 0 auto; }
+.section-tag { color: var(--accent); font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; font-size: 13px; margin-bottom: 14px; }
+.section-header { margin-bottom: 64px; max-width: 700px; }
+.section-header h2 { font-size: clamp(28px, 4vw, 38px); margin-bottom: 16px; }
+.section-header p { color: var(--mid); font-size: 17px; }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+@media(max-width: 800px) { .about-grid { grid-template-columns: 1fr; } }
+.about-text p { color: var(--mid); margin-bottom: 20px; font-size: 16px; }
+.about-text strong { color: var(--fg); }
+.skill-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.skill-tag { background: var(--accent-soft); color: var(--accent); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+.fact-list { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--light); }
+.fact-item { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.fact-item:last-child { border-bottom: none; }
+.fact-label { font-size: 13px; color: var(--mid); font-weight: 500; text-transform: uppercase; letter-spacing: .5px; }
+.fact-value { font-weight: 700; font-size: 15px; }
+.project-card {
+  background: var(--light); border: 1px solid var(--border); border-radius: 14px;
+  padding: 48px; margin-bottom: 28px; transition: all .25s;
+}
+.project-card:hover { border-color: var(--accent); box-shadow: 0 12px 30px rgba(46,92,138,0.08); transform: translateY(-3px); }
+.project-meta { color: var(--accent); font-weight: 600; margin-bottom: 14px; font-size: 13px; letter-spacing: .5px; text-transform: uppercase; }
+.project-card h3 { font-size: 24px; margin-bottom: 16px; }
+.project-card p { color: var(--mid); margin-bottom: 28px; font-size: 15.5px; }
+.project-stats { display: flex; gap: 28px; margin-bottom: 28px; flex-wrap: wrap; }
+.pstat-num { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--accent); }
+.pstat-lbl { font-size: 12px; color: var(--mid); text-transform: uppercase; letter-spacing: .5px; }
+footer { text-align:center; padding: 70px 6%; color: var(--mid); border-top: 1px solid var(--border); font-size: 14px; }
+footer a { color: var(--accent); text-decoration: none; }
+@media(max-width: 768px) {
+  nav { padding: 16px 5%; }
+  .nav-links a:not(.lang-toggle) { display: none; }
+  .hero { padding: 130px 6% 70px; }
+  section { padding: 80px 6%; }
+  .project-card { padding: 32px 24px; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="#" class="nav-logo">Maja<span>.</span></a>
+  <div class="nav-links">
+    <a href="#about" data-de="Über mich" data-en="About">Über mich</a>
+    <a href="#projects" data-de="Projekte" data-en="Projects">Projekte</a>
+    <a href="#contact" data-de="Kontakt" data-en="Contact">Kontakt</a>
+    <button class="lang-toggle" id="langBtn">EN</button>
+  </div>
+</nav>
+<section class="hero">
+  <div>
+    <div class="hero-tag" data-de="UX Researcherin · M.Sc. Psychologie" data-en="UX Researcher · M.Sc. Psychology">UX Researcherin · M.Sc. Psychologie</div>
+    <h1 data-de="Mich interessiert, ob und warum Menschen neuer Technologie vertrauen" data-en="I'm interested in whether and why people trust new technology">Mich interessiert, ob und warum Menschen neuer Technologie vertrauen</h1>
+    <p data-de="Ich studiere Psychologie im Master und beschäftige mich seit meiner Bachelorarbeit damit, wie Menschen mit KI Systemen und neuer Technologie umgehen, und warum das oft nicht so läuft, wie Designer:innen es sich vorstellen." data-en="I'm completing a Master's in Psychology and have, since my Bachelor's thesis, been working on how people deal with AI systems and new technology, and why that often doesn't go the way designers imagine it will.">Ich studiere Psychologie im Master und beschäftige mich seit meiner Bachelorarbeit damit, wie Menschen mit KI Systemen und neuer Technologie umgehen, und warum das oft nicht so läuft, wie Designer:innen es sich vorstellen.</p>
+    <p class="hero-sub" data-de="Auf dieser Seite stelle ich Ihnen drei Projekte vor, die meine unterschiedlichen Fähigkeiten und Herangehensweisen veranschaulichen. Für Fragen zu den Projekten stehe ich Ihnen gerne per E-Mail oder LinkedIn zur Verfügung." data-en="On this page I present three projects that illustrate my different skills and approaches. I am happy to answer any questions about the projects via email or LinkedIn.">Auf dieser Seite stelle ich Ihnen drei Projekte vor, die meine unterschiedlichen Fähigkeiten und Herangehensweisen veranschaulichen. Für Fragen zu den Projekten stehe ich Ihnen gerne per E-Mail oder LinkedIn zur Verfügung.</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn" data-de="Projekte ansehen" data-en="View Projects">Projekte ansehen</a>
+      <a href="#contact" class="btn-ghost" data-de="Kontakt aufnehmen" data-en="Get in Touch">Kontakt aufnehmen</a>
+    </div>
+  </div>
+</section>
+<section id="about">
+  <div class="section-tag" data-de="Über mich" data-en="About me">Über mich</div>
+  <div class="section-header">
+    <h2 data-de="Etwas zu meinem Hintergrund" data-en="A Bit About My Background">Etwas zu meinem Hintergrund</h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p data-de="Ich studiere <strong>Psychologie im Master</strong>. Mein Interesse an Mensch Technologie Interaktion kommt aus meiner Bachelorarbeit, in der ich untersucht habe, ob anthropomorphisierte KI Assistenten mehr Vertrauen schaffen als neutrale Systeme." data-en="I'm completing a <strong>Master's in Psychology</strong>. My interest in human technology interaction comes from my Bachelor's thesis, where I examined whether anthropomorphized AI assistants create more trust than neutral systems.">Ich studiere <strong>Psychologie im Master</strong>. Mein Interesse an Mensch Technologie Interaktion kommt aus meiner Bachelorarbeit, in der ich untersucht habe, ob anthropomorphisierte KI Assistenten mehr Vertrauen schaffen als neutrale Systeme.</p>
+      <p data-de="Mit 200 Probanden in einem experimentellen Design bin ich dabei auf ein Ergebnis gestoßen, das der üblichen Designpraxis vieler großer Tech Unternehmen widerspricht. Das hat mir gezeigt, wie wichtig es ist, Annahmen tatsächlich zu testen, statt sie einfach zu übernehmen, weil sie intuitiv plausibel klingen." data-en="With 200 participants in an experimental design, I found a result that contradicts the typical design practice of many large tech companies. That showed me how important it is to actually test assumptions instead of simply adopting them because they sound intuitively plausible.">Mit 200 Probanden in einem experimentellen Design bin ich dabei auf ein Ergebnis gestoßen, das der üblichen Designpraxis vieler großer Tech Unternehmen widerspricht. Das hat mir gezeigt, wie wichtig es ist, Annahmen tatsächlich zu testen, statt sie einfach zu übernehmen, weil sie intuitiv plausibel klingen.</p>
+      <p data-de="Ich verbinde die Fähigkeit, menschliches Verhalten methodisch zu erfassen, statistisch auszuwerten und daraus nachvollziehbare Designentscheidungen abzuleiten, statt nur zu raten." data-en="I combine the ability to methodically capture human behavior, analyze it statistically, and derive traceable design decisions from it, rather than just guessing.">Ich verbinde die Fähigkeit, menschliches Verhalten methodisch zu erfassen, statistisch auszuwerten und daraus nachvollziehbare Designentscheidungen abzuleiten, statt nur zu raten.</p>
+      <div class="skill-tags">
+        <span class="skill-tag">SPSS · t Tests · Poweranalyse</span>
+        <span class="skill-tag">Figma</span>
+        <span class="skill-tag">User Research</span>
+        <span class="skill-tag" data-de="Experimentelles Design" data-en="Experimental Design">Experimentelles Design</span>
+        <span class="skill-tag" data-de="KI gestützte Analyse" data-en="AI assisted Analysis">KI gestützte Analyse</span>
+      </div>
+    </div>
+    <div class="fact-list">
+      <div class="fact-item"><span class="fact-label" data-de="Ausbildung" data-en="Education">Ausbildung</span><span class="fact-value" data-de="M.Sc. Psychologie (laufend)" data-en="M.Sc. Psychology (ongoing)">M.Sc. Psychologie (laufend)</span></div>
+      <div class="fact-item"><span class="fact-label" data-de="Methoden" data-en="Methods">Methoden</span><span class="fact-value" data-de="Quantitativ & qualitativ" data-en="Quantitative & qualitative">Quantitativ & qualitativ</span></div>
+      <div class="fact-item"><span class="fact-label" data-de="Sprachen" data-en="Languages">Sprachen</span><span class="fact-value">Deutsch · English · Polski</span></div>
+      <div class="fact-item"><span class="fact-label" data-de="Standort" data-en="Location">Standort</span><span class="fact-value">Hamburg · Remote</span></div>
+      <div class="fact-item"><span class="fact-label" data-de="Verfügbar ab" data-en="Available from">Verfügbar ab</span><span class="fact-value">2026</span></div>
+    </div>
+  </div>
+</section>
+<section id="projects">
+  <div class="section-tag" data-de="Projekte" data-en="Projects">Projekte</div>
+  <div class="section-header">
+    <h2 data-de="Drei Projekte, eine wiederkehrende Frage" data-en="Three Projects, One Recurring Question">Drei Projekte, eine wiederkehrende Frage</h2>
+    <p data-de="Jedes Projekt nutzt eine andere Methode, von einem kontrollierten Experiment bis zu einem Redesign auf Basis von Forschung." data-en="Each project uses a different method, from a controlled experiment to a research based redesign.">Jedes Projekt nutzt eine andere Methode, von einem kontrollierten Experiment bis zu einem Redesign auf Basis von Forschung.</p>
+  </div>
+  <div class="project-card">
+    <div class="project-meta" data-de="Bachelorarbeit · Experimentelle Studie · 2024" data-en="Bachelor's Thesis · Experimental Study · 2024">Bachelorarbeit · Experimentelle Studie · 2024</div>
+    <h3 data-de="Sollten KI Assistenten eine Persönlichkeit haben?" data-en="Should AI Assistants Have a Personality?">Sollten KI Assistenten eine Persönlichkeit haben?</h3>
+    <p data-de="Eine Between Subjects Studie mit 200 Probanden zu der Frage, ob anthropomorphisierte KI Assistenten mehr Vertrauen schaffen als neutrale Systeme. Das Ergebnis war nicht ganz das, was ich erwartet hatte." data-en="A between subjects study with 200 participants on whether anthropomorphized AI assistants create more trust than neutral systems. The result wasn't quite what I expected.">Eine Between Subjects Studie mit 200 Probanden zu der Frage, ob anthropomorphisierte KI Assistenten mehr Vertrauen schaffen als neutrale Systeme. Das Ergebnis war nicht ganz das, was ich erwartet hatte.</p>
+    <div class="project-stats">
+      <div><div class="pstat-num">200</div><div class="pstat-lbl" data-de="Probanden" data-en="Participants">Probanden</div></div>
+      <div><div class="pstat-num">p=.009</div><div class="pstat-lbl" data-de="Signifikanz" data-en="Significance">Signifikanz</div></div>
+      <div><div class="pstat-num">+6,3%</div><div class="pstat-lbl" data-de="Mehr Vertrauen" data-en="More Trust">Mehr Vertrauen</div></div>
+    </div>
+    <a href="case-study-ai-trust.html" class="btn" data-de="Case Study öffnen" data-en="Open Case Study">Case Study öffnen</a>
+  </div>
+  <div class="project-card">
+    <div class="project-meta" data-de="UX Redesign · Figma · 2025" data-en="UX Redesign · Figma · 2025">UX Redesign · Figma · 2025</div>
+    <h3 data-de="Vom schlechten zum besseren Checkout" data-en="From a Bad to a Better Checkout">Vom schlechten zum besseren Checkout</h3>
+    <p data-de="Eine heuristische Analyse eines überladenen Checkout Prozesses und ein Redesign, bei dem ich versucht habe, jede Entscheidung mit Forschung zu begründen, statt einfach nur hübscher zu gestalten." data-en="A heuristic analysis of a bloated checkout process and a redesign where I tried to justify every decision with research, instead of just making it prettier.">Eine heuristische Analyse eines überladenen Checkout Prozesses und ein Redesign, bei dem ich versucht habe, jede Entscheidung mit Forschung zu begründen, statt einfach nur hübscher zu gestalten.</p>
+    <div class="project-stats">
+      <div><div class="pstat-num">10→6</div><div class="pstat-lbl" data-de="Formularfelder" data-en="Form Fields">Formularfelder</div></div>
+      <div><div class="pstat-num">35%</div><div class="pstat-lbl" data-de="Potenzielle Conversion Steigerung lt. Forschung" data-en="Potential Conversion Lift per Research">Potenzielle Conversion Steigerung lt. Forschung</div></div>
+    </div>
+    <a href="case-checkout-figma.html" class="btn" data-de="Case Study öffnen" data-en="Open Case Study">Case Study öffnen</a>
+  </div>
+  <div class="project-card">
+    <div class="project-meta" data-de="End to End Projekt · Android App · 2025" data-en="End to End Project · Android App · 2025">End to End Projekt · Android App · 2025</div>
+    <h3 data-de="BreatheEasy, von der Recherche zur Live App" data-en="BreatheEasy, From Research to a Live App">BreatheEasy, von der Recherche zur Live App</h3>
+    <p data-de="Eine Atemübungs App, bei der ich versucht habe, möglichst jede Entscheidung auf wissenschaftliche Literatur zurückzuführen, von der RSA Forschung bis zur Veröffentlichung im Play Store." data-en="A breathing app where I tried to trace as many decisions as possible back to scientific literature, from RSA research to publication on the Play Store.">Eine Atemübungs App, bei der ich versucht habe, möglichst jede Entscheidung auf wissenschaftliche Literatur zurückzuführen, von der RSA Forschung bis zur Veröffentlichung im Play Store.</p>
+    <div class="project-stats">
+      <div><div class="pstat-num">12</div><div class="pstat-lbl" data-de="Beta Tester:innen" data-en="Beta Testers">Beta Tester:innen</div></div>
+      <div><div class="pstat-num">5</div><div class="pstat-lbl" data-de="Peer Reviewed Quellen" data-en="Peer Reviewed Sources">Peer Reviewed Quellen</div></div>
+      <div><div class="pstat-num" data-de="Live" data-en="Live">Live</div><div class="pstat-lbl">Google Play Store</div></div>
+    </div>
+    <a href="case-study-breatheeasy.html" class="btn" data-de="Case Study öffnen" data-en="Open Case Study">Case Study öffnen</a>
+  </div>
+</section>
+<section id="contact">
+  <div class="section-tag" data-de="Kontakt" data-en="Contact">Kontakt</div>
+  <div class="section-header">
+    <h2 data-de="Lass uns sprechen" data-en="Let's Talk">Lass uns sprechen</h2>
+    <p data-de="Ich suche ab 2026 eine Junior UX Research Position, gerne auch ein Werkstudium oder Praktikum im Bereich Mensch Technologie Interaktion." data-en="I'm looking for a Junior UX Research position starting 2026, and I'm also open to working student or internship roles in human technology interaction.">Ich suche ab 2026 eine Junior UX Research Position, gerne auch ein Werkstudium oder Praktikum im Bereich Mensch Technologie Interaktion.</p>
+  </div>
+  <div class="hero-cta">
+    <a href="mailto:maja.dobaj10@gmail.com" class="btn" data-de="E Mail schreiben" data-en="Send an Email">E Mail schreiben</a>
+    <a href="https://www.linkedin.com/in/maja-dobaj-863a59321/" target="_blank" class="btn-ghost" data-de="LinkedIn Profil" data-en="LinkedIn Profile">LinkedIn Profil</a>
+    <a href="Lebenslauf_Dobaj_final.pdf" target="_blank" class="btn-ghost" data-de="Lebenslauf als PDF" data-en="Resume as PDF">Lebenslauf als PDF</a>
+  </div>
+</section>
+<footer>
+  <span data-de="© 2026 Maja · Hamburg / Remote" data-en="© 2026 Maja · Hamburg / Remote">© 2026 Maja · Hamburg / Remote</span>
+</footer>
+<script>
+let lang = 'de';
+const langBtn = document.getElementById('langBtn');
+function applyLang() {
+  langBtn.textContent = lang === 'de' ? 'EN' : 'DE';
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-de],[data-en]').forEach(el => {
+    const text = el.getAttribute(`data-${lang}`);
+    if (text) el.innerHTML = text;
+  });
+}
+langBtn.addEventListener('click', () => {
+  lang = lang === 'de' ? 'en' : 'de';
+  applyLang();
+});
+</script>
+</body>
+</html>

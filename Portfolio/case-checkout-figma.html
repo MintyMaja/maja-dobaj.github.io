@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout Redesign – Case Study | Maja UX Research</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAFAFA; --fg: #1F1F1F; --mid: #5A5A5A; --accent: #2E5C8A;
+  --accent-soft: #EAF1F8; --light: #FFFFFF; --border: #E3E3E0;
+  --bad: #FEE2E2; --bad-text: #B91C1C;
+  --good: #DCFCE7; --good-text: #15803D;
+}
+* { box-sizing: border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--fg); line-height: 1.75; }
+h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 700; line-height: 1.15; }
+
+.skip-link { position: absolute; top: -50px; left: 20px; background: var(--accent); color: white; padding: 10px 16px; z-index: 10000; }
+.skip-link:focus { top: 10px; }
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; background: rgba(250,250,250,0.96);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border); padding: 20px 6%; display: flex; justify-content: space-between; align-items: center; z-index: 999;
+}
+.nav-logo { font-size: 24px; font-weight: 700; color: var(--fg); text-decoration: none; font-family: 'Playfair Display', serif; }
+.nav-logo span { color: var(--accent); }
+.nav-back { color: var(--mid); text-decoration: none; font-weight: 500; font-size: 15px; }
+.nav-back:hover { color: var(--accent); }
+.lang-toggle { padding: 7px 16px; border: 1px solid var(--border); border-radius: 6px; background: var(--light); cursor: pointer; font-weight: 600; font-size: 13px; }
+.lang-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.nav-right { display: flex; align-items: center; gap: 24px; }
+
+.hero { padding: 170px 6% 90px; background: var(--light); border-bottom: 1px solid var(--border); }
+.hero-inner { max-width: 1100px; margin: 0 auto; }
+.hero-tag { color: var(--accent); font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px; font-size: 13px; }
+.hero h1 { font-size: clamp(32px, 5.5vw, 50px); margin-bottom: 22px; max-width: 780px; }
+.hero p { font-size: 1.1rem; color: var(--mid); max-width: 700px; margin-bottom: 14px; }
+
+.meta-row { display: flex; flex-wrap: wrap; gap: 16px; margin: 36px 0 0; }
+.meta-item { background: var(--accent-soft); border-radius: 10px; padding: 18px 22px; flex: 1; min-width: 160px; }
+.meta-item strong { display: block; color: var(--accent); font-size: 13px; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+.meta-item span { font-size: 15px; font-weight: 600; }
+
+section { padding: 90px 6%; max-width: 1100px; margin: 0 auto; }
+.section-num { color: var(--accent); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; font-size: 13px; margin-bottom: 14px; }
+.section-header h2 { font-size: clamp(26px, 4vw, 36px); margin-bottom: 16px; }
+section p { color: var(--mid); margin-bottom: 18px; font-size: 16px; max-width: 760px; }
+section p strong { color: var(--fg); font-weight: 700; }
+
+.highlight { background: var(--accent-soft); border-left: 4px solid var(--accent); padding: 26px 30px; margin: 32px 0; border-radius: 6px; max-width: 760px; }
+.highlight strong { display: block; color: var(--accent); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.highlight p { font-family: 'Playfair Display', serif; font-style: italic; font-size: 18px; color: var(--fg); margin-bottom: 0; max-width: 100%; }
+
+/* Comparison */
+.comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: 48px 0; align-items: start; }
+@media(max-width: 800px) { .comparison-grid { grid-template-columns: 1fr; } }
+.before-after { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--light); }
+.comp-label { padding: 14px 22px; font-weight: 700; font-size: 13px; text-align: center; letter-spacing: .5px; text-transform: uppercase; }
+.bad .comp-label { background: var(--bad); color: var(--bad-text); }
+.good .comp-label { background: var(--good); color: var(--good-text); }
+.before-after img { width: 100%; display: block; height: auto; }
+
+.figma-link { display: inline-flex; align-items: center; gap: 10px; background: var(--light); border: 1px solid var(--border); border-radius: 8px; padding: 14px 22px; text-decoration: none; color: var(--fg); font-weight: 600; font-size: 14px; transition: all .2s; margin: 24px 0; }
+.figma-link:hover { border-color: var(--accent); color: var(--accent); }
+.figma-icon { font-size: 18px; }
+
+/* Problem list */
+.problem-list { display: grid; gap: 16px; margin: 36px 0; }
+.problem-item { background: var(--light); border: 1px solid var(--border); border-radius: 12px; padding: 28px; display: grid; grid-template-columns: 48px 1fr; gap: 20px; align-items: start; }
+.problem-num { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--accent); font-weight: 700; }
+.problem-item h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; font-family: 'Inter'; }
+.problem-item p { font-size: 14px; margin-bottom: 6px; }
+.problem-item p:last-child { margin-bottom: 0; }
+.problem-source { font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--accent); font-family: monospace; }
+
+/* Change table */
+.change-table { width: 100%; border-collapse: collapse; margin: 36px 0; background: var(--light); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.change-table th { padding: 14px 20px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+.change-table th:first-child { background: var(--bad); color: var(--bad-text); }
+.change-table th:last-child { background: var(--good); color: var(--good-text); }
+.change-table td { padding: 14px 20px; font-size: 14px; color: var(--mid); border-top: 1px solid var(--border); vertical-align: top; }
+.change-table td strong { color: var(--fg); display: block; margin-bottom: 4px; }
+
+/* Stats */
+.stats-row { display: flex; flex-wrap: wrap; gap: 16px; margin: 36px 0; }
+.stat-box { background: var(--light); border: 1px solid var(--border); border-radius: 10px; padding: 24px; text-align: center; flex: 1; min-width: 140px; }
+.stat-num { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--accent); }
+.stat-lbl { font-size: 12px; color: var(--mid); margin-top: 4px; line-height: 1.4; }
+
+.limit-box { background: var(--light); border: 1px solid var(--border); border-radius: 12px; padding: 36px; margin: 36px 0; }
+.limit-box h4 { font-size: 17px; margin-bottom: 14px; font-family: 'Inter'; font-weight: 700; }
+.next-steps { display: grid; gap: 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-top: 18px; }
+.ns { padding: 16px 20px; border-bottom: 1px solid var(--border); font-size: 13.5px; color: var(--mid); display: flex; align-items: flex-start; gap: 12px; }
+.ns:last-child { border-bottom: none; }
+.ns::before { content: '→'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+
+.refs { background: var(--light); border: 1px solid var(--border); border-radius: 12px; padding: 36px; margin: 40px 0; }
+.refs h4 { font-size: 17px; margin-bottom: 20px; font-family: 'Inter'; }
+.ref-item { font-size: 13px; color: var(--mid); padding: 12px 0; border-bottom: 1px solid var(--border); }
+.ref-item:last-child { border-bottom: none; }
+
+.btn { background: var(--accent); color: white; padding: 16px 38px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; font-size: 15px; transition: all .2s; }
+.btn:hover { background: #244a70; transform: translateY(-2px); }
+
+footer { text-align:center; padding: 70px 6%; color: var(--mid); border-top: 1px solid var(--border); font-size: 14px; }
+
+@media(max-width: 768px) {
+  nav { padding: 16px 5%; }
+  .hero { padding: 130px 6% 60px; }
+  section { padding: 60px 6%; }
+  .meta-row, .stats-row { flex-direction: column; }
+  .problem-item { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Zum Hauptinhalt springen</a>
+
+<nav>
+  <a href="index.html" class="nav-logo">Maja<span>.</span></a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back" data-de="← Zurück zum Portfolio" data-en="← Back to Portfolio">← Zurück zum Portfolio</a>
+    <button class="lang-toggle" id="langBtn">EN</button>
+  </div>
+</nav>
+
+<main id="main-content">
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag" data-de="Case Study · UX Redesign · Figma · 2025" data-en="Case Study · UX Redesign · Figma · 2025">Case Study · UX Redesign · Figma · 2025</div>
+    <h1 data-de="Vom schlechten zum besseren Checkout" data-en="From a Bad to a Better Checkout">Vom schlechten zum besseren Checkout</h1>
+    <p data-de="In diesem Projekt habe ich einen überladenen, schlecht strukturierten Checkout Prozess analysiert und ein überarbeitetes Design erstellt, bei dem ich versucht habe, jede Änderung auf Forschung zurückzuführen." data-en="In this project I analysed an overloaded, poorly structured checkout process and created a revised design, trying to ground each change in research.">In diesem Projekt habe ich einen überladenen, schlecht strukturierten Checkout Prozess analysiert und ein überarbeitetes Design erstellt, bei dem ich versucht habe, jede Änderung auf Forschung zurückzuführen.</p>
+    <p data-de="Mein Ziel ist es nicht, zu behaupten, dass mein Redesign perfekt ist, sondern vielmehr zu demonstrieren, wie ich bei derartigen Projekten vorgehe. Zunächst analysiere ich die Gründe für die bestehenden Herausforderungen und leite daraus die Änderungen ab, die ich vornehmen würde." data-en="My goal is not to claim that my redesign is perfect, but rather to demonstrate how I approach such projects. First, I analyze the reasons for the existing challenges and derive the changes I would make from them.">Mein Ziel ist es nicht, zu behaupten, dass mein Redesign perfekt ist, sondern vielmehr zu demonstrieren, wie ich bei derartigen Projekten vorgehe. Zunächst analysiere ich die Gründe für die bestehenden Herausforderungen und leite daraus die Änderungen ab, die ich vornehmen würde.</p>
+    <div class="meta-row">
+      <div class="meta-item"><strong data-de="Tool" data-en="Tool">Tool</strong><span>Figma</span></div>
+      <div class="meta-item"><strong data-de="Methode" data-en="Method">Methode</strong><span data-de="Heuristische Analyse" data-en="Heuristic Analysis">Heuristische Analyse</span></div>
+      <div class="meta-item"><strong data-de="Basis" data-en="Basis">Basis</strong><span data-de="Peer reviewed Forschung" data-en="Peer reviewed research">Peer reviewed Forschung</span></div>
+      <div class="meta-item"><strong data-de="Jahr" data-en="Year">Jahr</strong><span>2025</span></div>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="section-num" data-de="01 · Ausgangspunkt" data-en="01 · Starting Point">01 · Ausgangspunkt</div>
+  <div class="section-header"><h2 data-de="Warum der Checkout Prozess wichtig ist" data-en="Why the Checkout Process Matters">Warum der Checkout Prozess wichtig ist</h2></div>
+  <p data-de="Checkout Abbrüche sind eines der am besten erforschten Probleme im E-Commerce. Die Zahlen sind bekannt und trotzdem sehen viele Checkouts noch immer so aus wie das Bad Design, das ich hier als Ausgangspunkt genommen habe: zu viele Felder, keine Orientierung, kein Vertrauen." data-en="Checkout abandonment is one of the most thoroughly researched problems in e-commerce. The numbers are well known and yet many checkouts still look like the bad design I took as a starting point here: too many fields, no orientation, no sense of trust.">Checkout Abbrüche sind eines der am besten erforschten Probleme im E-Commerce. Die Zahlen sind bekannt und trotzdem sehen viele Checkouts noch immer so aus wie das Bad Design, das ich hier als Ausgangspunkt genommen habe: zu viele Felder, keine Orientierung, kein Vertrauen.</p>
+  <p data-de="Ein interessanter Aspekt der Forschung ist, dass es sich beim Checkout weniger um ein technisches als um ein psychologisches Problem handelt. Eine qualitative Studie, die ich bei der Recherche gefunden habe, beschreibt als Hauptabbruchgründe Faktoren wie emotionale Ambivalenz, Entscheidungsmüdigkeit und wahrgenommenes Risiko (Adnan, 2025), also Dinge, die schlechtes Interface Design aktiv verschlimmert." data-en="An interesting aspect of the research is that checkout is less of a technical problem and more of a psychological one. A qualitative study I found during my research describes the main reasons for abandonment as factors such as emotional ambivalence, decision fatigue, and perceived risk (Adnan, 2025), things that poor interface design actively worsens.">Ein interessanter Aspekt der Forschung ist, dass es sich beim Checkout weniger um ein technisches als um ein psychologisches Problem handelt. Eine qualitative Studie, die ich bei der Recherche gefunden habe, beschreibt als Hauptabbruchgründe Faktoren wie emotionale Ambivalenz, Entscheidungsmüdigkeit und wahrgenommenes Risiko (Adnan, 2025), also Dinge, die schlechtes Interface Design aktiv verschlimmert.</p>
+  <div class="highlight">
+    <strong data-de="Meine Ausgangsfrage" data-en="My Starting Question">Meine Ausgangsfrage</strong>
+    <p data-de="Was genau macht diesen Checkout so schwer nutzbar, und welche dieser Probleme lassen sich mit begründeten Designänderungen angehen?" data-en="What exactly makes this checkout so hard to use, and which of these problems can be addressed through justified design changes?">Was genau macht diesen Checkout so schwer nutzbar, und welche dieser Probleme lassen sich mit begründeten Designänderungen angehen?</p>
+  </div>
+</section>
+
+<section>
+  <div class="section-num" data-de="02 · Vorher und Nachher" data-en="02 · Before and After">02 · Vorher und Nachher</div>
+  <div class="section-header"><h2 data-de="Die beiden Designs im Vergleich" data-en="The Two Designs Compared">Die beiden Designs im Vergleich</h2></div>
+  <p data-de="Beide Versionen sind in Figma entstanden. Das linke Design zeigt bewusst eingebaute UX Probleme, das rechte den überarbeiteten Stand." data-en="Both versions were created in Figma. The left design shows deliberately built in UX problems, the right shows the revised version.">Beide Versionen sind in Figma entstanden. Das linke Design zeigt bewusst eingebaute UX Probleme, das rechte den überarbeiteten Stand.</p>
+
+  <div class="comparison-grid">
+    <div class="before-after bad">
+      <div class="comp-label" data-de="Schlechtes Design" data-en="Bad Design">Schlechtes Design</div>
+      <img src="images/bad-checkout.png" alt="Schlechtes Checkout Design" loading="lazy">
+    </div>
+    <div class="before-after good">
+      <div class="comp-label" data-de="Überarbeitetes Design" data-en="Revised Design">Überarbeitetes Design</div>
+      <img src="images/good-checkout.png" alt="Überarbeitetes Checkout Design" loading="lazy">
+    </div>
+  </div>
+
+  <a href="https://www.figma.com/design/6ueqQvyGJ6sW4A8TFuPAuD/Bad-Checkout?node-id=0-1&t=0cqSwrFVhl3qFmS9-1" target="_blank" class="figma-link">
+    <span class="figma-icon">🎨</span>
+    <span data-de="Figma Datei öffnen" data-en="Open Figma File">Figma Datei öffnen</span>
+  </a>
+</section>
+
+<section>
+  <div class="section-num" data-de="03 · Was im schlechten Design nicht funktioniert" data-en="03 · What Doesn't Work in the Bad Design">03 · Was im schlechten Design nicht funktioniert</div>
+  <div class="section-header"><h2 data-de="Die Probleme und ihre Grundlage" data-en="The Problems and Their Basis">Die Probleme und ihre Grundlage</h2></div>
+  <p data-de="Ich habe das schlechte Design heuristisch analysiert und die identifizierten Probleme mit aktueller Forschung abgeglichen. Hier sind die wichtigsten Punkte." data-en="I analysed the bad design heuristically and cross referenced the identified problems with current research. Here are the main points.">Ich habe das schlechte Design heuristisch analysiert und die identifizierten Probleme mit aktueller Forschung abgeglichen. Hier sind die wichtigsten Punkte.</p>
+
+  <div class="problem-list">
+    <div class="problem-item">
+      <div class="problem-num">01</div>
+      <div>
+        <h4 data-de="Zehn Formularfelder auf einmal" data-en="Ten Form Fields at Once">Zehn Formularfelder auf einmal</h4>
+        <p data-de="Das Formular enthält zehn Pflichtfelder gleichzeitig, darunter Felder wie Date of Birth und Address Line 2, die für einen Standard Checkout nicht notwendig sind. Forschung zur kognitiven Belastung zeigt, dass zu viele Informationen und komplexe Formulare Nutzer:innen überfordern und zu Fehlern und Abbrüchen führen." data-en="The form contains ten required fields simultaneously, including fields like Date of Birth and Address Line 2 that aren't necessary for a standard checkout. Research on cognitive load shows that too much information and complex forms overwhelm users and lead to errors and abandonment.">Das Formular enthält zehn Pflichtfelder gleichzeitig, darunter Felder wie Date of Birth und Address Line 2, die für einen Standard Checkout nicht notwendig sind. Forschung zur kognitiven Belastung zeigt, dass zu viele Informationen und komplexe Formulare Nutzer:innen überfordern und zu Fehlern und Abbrüchen führen.</p>
+        <div class="problem-source">Mishra, Guleria & Parikh, 2025</div>
+      </div>
+    </div>
+    <div class="problem-item">
+      <div class="problem-num">02</div>
+      <div>
+        <h4 data-de="Keine Fortschrittsanzeige" data-en="No Progress Indicator">Keine Fortschrittsanzeige</h4>
+        <p data-de="Nutzer:innen wissen nicht, wo sie im Prozess sind oder wie viele Schritte noch folgen. Eine Usability Studie mit 70 Teilnehmenden stellte fest, dass ein Checkout System mit unklarer Informationshierarchie nur einen SUS Score von 69,57 erreichte, was als marginal eingestuft wurde. Nach dem Redesign mit klaren Hierarchien stieg der Score auf 96,64." data-en="Users don't know where they are in the process or how many steps remain. A usability study with 70 participants found that a checkout system with unclear information hierarchy reached only a SUS score of 69.57, rated as marginal. After redesigning with clear hierarchies, the score rose to 96.64.">Nutzer:innen wissen nicht, wo sie im Prozess sind oder wie viele Schritte noch folgen. Eine Usability Studie mit 70 Teilnehmenden stellte fest, dass ein Checkout System mit unklarer Informationshierarchie nur einen SUS Score von 69,57 erreichte, was als marginal eingestuft wurde. Nach dem Redesign mit klaren Hierarchien stieg der Score auf 96,64.</p>
+        <div class="problem-source">Pahlevi & Santoso, 2026</div>
+      </div>
+    </div>
+    <div class="problem-item">
+      <div class="problem-num">03</div>
+      <div>
+        <h4 data-de="Preise tauchen erst am Ende auf" data-en="Prices Only Appear at the End">Preise tauchen erst am Ende auf</h4>
+        <p data-de="Subtotal, Shipping und Tax erscheinen erst ganz unten, kurz vor dem Submit Button. Forschung zeigt, dass versteckte Zusatzgebühren, die erst spät sichtbar werden, zu den Hauptursachen für Warenkorbabbrüche gehören." data-en="Subtotal, shipping and tax only appear at the very bottom, just before the submit button. Research shows that hidden additional costs that only become visible late are among the main causes of cart abandonment.">Subtotal, Shipping und Tax erscheinen erst ganz unten, kurz vor dem Submit Button. Forschung zeigt, dass versteckte Zusatzgebühren, die erst spät sichtbar werden, zu den Hauptursachen für Warenkorbabbrüche gehören.</p>
+        <div class="problem-source">Zenodo, 2025</div>
+      </div>
+    </div>
+    <div class="problem-item">
+      <div class="problem-num">04</div>
+      <div>
+        <h4 data-de="Kein Vertrauenssignal" data-en="No Trust Signal">Kein Vertrauenssignal</h4>
+        <p data-de="Es gibt keine Sicherheitshinweise im Bereich der Zahlungseingabe. Eine Studie zu Warenkorbabbrüchen identifiziert wahrgenommenes Risiko und fehlendes Vertrauen als psychologische Hauptfaktoren, die stärker wirken als technische Probleme." data-en="There are no security indicators in the payment input area. A study on cart abandonment identifies perceived risk and lack of trust as the main psychological factors, outweighing technical issues.">Es gibt keine Sicherheitshinweise im Bereich der Zahlungseingabe. Eine Studie zu Warenkorbabbrüchen identifiziert wahrgenommenes Risiko und fehlendes Vertrauen als psychologische Hauptfaktoren, die stärker wirken als technische Probleme.</p>
+        <div class="problem-source">Adnan, 2025</div>
+      </div>
+    </div>
+    <div class="problem-item">
+      <div class="problem-num">05</div>
+      <div>
+        <h4 data-de="Grauer, unauffälliger Submit Button" data-en="Grey, Inconspicuous Submit Button">Grauer, unauffälliger Submit Button</h4>
+        <p data-de="Der einzige Call to Action Button hat kaum Kontrast und ist visuell kaum von den Formularfeldern zu unterscheiden. Eine A/B Studie mit 80 Teilnehmenden zeigte, dass ein optimiertes Interface mit klarer visueller Hierarchie zu weniger Klicks und weniger Fehlern führt." data-en="The only call to action button has very little contrast and is visually hard to distinguish from the form fields. An A/B study with 80 participants showed that an optimised interface with clear visual hierarchy leads to fewer clicks and fewer errors.">Der einzige Call to Action Button hat kaum Kontrast und ist visuell kaum von den Formularfeldern zu unterscheiden. Eine A/B Studie mit 80 Teilnehmenden zeigte, dass ein optimiertes Interface mit klarer visueller Hierarchie zu weniger Klicks und weniger Fehlern führt.</p>
+        <div class="problem-source">Fu et al., 2026</div>
+      </div>
+    </div>
+    <div class="problem-item">
+      <div class="problem-num">06</div>
+      <div>
+        <h4 data-de="Kein Guest Checkout" data-en="No Guest Checkout">Kein Guest Checkout</h4>
+        <p data-de="Das Design gibt keinen Hinweis darauf, ob man als Gast kaufen kann. Die Forschung zeigt, dass erzwungene Registrierung besonders bei Männern zu erhöhten Abbruchraten führt, aber auch insgesamt als Friction Faktor gilt." data-en="The design gives no indication of whether one can purchase as a guest. Research shows that forced registration especially increases abandonment rates among men, but is also generally considered a friction factor.">Das Design gibt keinen Hinweis darauf, ob man als Gast kaufen kann. Die Forschung zeigt, dass erzwungene Registrierung besonders bei Männern zu erhöhten Abbruchraten führt, aber auch insgesamt als Friction Faktor gilt.</p>
+        <div class="problem-source">Tarigan et al., 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-num" data-de="04 · Was ich geändert habe und warum" data-en="04 · What I Changed and Why">04 · Was ich geändert habe und warum</div>
+  <div class="section-header"><h2 data-de="Die Änderungen im Überblick" data-en="The Changes at a Glance">Die Änderungen im Überblick</h2></div>
+  <p data-de="Für jede Änderung im überarbeiteten Design gibt es eine Begründung. Die folgende Tabelle fasst die wichtigsten zusammen." data-en="Every change in the revised design has a justification. The table below summarises the most important ones.">Für jede Änderung im überarbeiteten Design gibt es eine Begründung. Die folgende Tabelle fasst die wichtigsten zusammen.</p>
+
+  <table class="change-table">
+    <tr>
+      <th data-de="Bad Design" data-en="Bad Design">Bad Design</th>
+      <th data-de="Überarbeitetes Design" data-en="Revised Design">Überarbeitetes Design</th>
+    </tr>
+    <tr>
+      <td><strong data-de="10 Pflichtfelder" data-en="10 required fields">10 Pflichtfelder</strong><span data-de="Inkl. Date of Birth, Phone, Address Line 2" data-en="Incl. Date of Birth, Phone, Address Line 2">Inkl. Date of Birth, Phone, Address Line 2</span></td>
+      <td><strong data-de="6 Felder" data-en="6 fields">6 Felder</strong><span data-de="Nur das Nötigste, Name und Nachname in einer Zeile, PLZ und Stadt in einer Zeile" data-en="Only essentials, first and last name on one row, zip and city on one row">Nur das Nötigste, Name und Nachname in einer Zeile, PLZ und Stadt in einer Zeile</span></td>
+    </tr>
+    <tr>
+      <td><strong data-de="Keine Fortschrittsanzeige" data-en="No progress indicator">Keine Fortschrittsanzeige</strong><span data-de="Nutzer:innen wissen nicht wo sie sind" data-en="Users don't know where they are">Nutzer:innen wissen nicht wo sie sind</span></td>
+      <td><strong data-de="Step 1 of 3" data-en="Step 1 of 3">Step 1 of 3</strong><span data-de="Klare Orientierung im Prozess" data-en="Clear orientation in the process">Klare Orientierung im Prozess</span></td>
+    </tr>
+    <tr>
+      <td><strong data-de="Preise erst am Ende sichtbar" data-en="Prices only visible at the end">Preise erst am Ende sichtbar</strong><span data-de="Überraschung kurz vor dem Kauf" data-en="Surprise just before purchase">Überraschung kurz vor dem Kauf</span></td>
+      <td><strong data-de="Gesamtbetrag im CTA Button" data-en="Total in CTA button">Gesamtbetrag im CTA Button</strong><span data-de="Continue to Shipping zeigt den Kontext" data-en="Continue to Shipping shows context">Continue to Shipping zeigt den Kontext</span></td>
+    </tr>
+    <tr>
+      <td><strong data-de="Kein Vertrauenssignal" data-en="No trust signal">Kein Vertrauenssignal</strong><span data-de="Besonders problematisch bei Zahlungsdaten" data-en="Especially problematic with payment data">Besonders problematisch bei Zahlungsdaten</span></td>
+      <td><strong data-de="SSL encrypted · Secure payment" data-en="SSL encrypted · Secure payment">SSL encrypted · Secure payment</strong><span data-de="Direkt über dem finalen Button" data-en="Directly above the final button">Direkt über dem finalen Button</span></td>
+    </tr>
+    <tr>
+      <td><strong data-de="Grauer Submit Button" data-en="Grey submit button">Grauer Submit Button</strong><span data-de="Kaum sichtbar, kein Kontrast" data-en="Barely visible, no contrast">Kaum sichtbar, kein Kontrast</span></td>
+      <td><strong data-de="Grüner Button mit klarer Beschriftung" data-en="Green button with clear label">Grüner Button mit klarer Beschriftung</strong><span data-de="Continue to Shipping, hoher Kontrast" data-en="Continue to Shipping, high contrast">Continue to Shipping, hoher Kontrast</span></td>
+    </tr>
+    <tr>
+      <td><strong data-de="Kein Guest Checkout" data-en="No guest checkout">Kein Guest Checkout</strong><span data-de="Keine Alternative zur Registrierung erkennbar" data-en="No alternative to registration visible">Keine Alternative zur Registrierung erkennbar</span></td>
+      <td><strong data-de="Continue as Guest prominent" data-en="Continue as Guest prominently placed">Continue as Guest prominent</strong><span data-de="Als grüner Button direkt über den Feldern" data-en="As a green button directly above the fields">Als grüner Button direkt über den Feldern</span></td>
+    </tr>
+    <tr>
+      <td><strong data-de="Keine Schnellzahlung" data-en="No express payment">Keine Schnellzahlung</strong><span data-de="Nur Kreditkarte, manuell eingeben" data-en="Only credit card, manual entry">Nur Kreditkarte, manuell eingeben</span></td>
+      <td><strong data-de="Express Pay Optionen" data-en="Express Pay Options">Express Pay Optionen</strong><span data-de="Drei Buttons für schnellere Zahlungswege" data-en="Three buttons for faster payment routes">Drei Buttons für schnellere Zahlungswege</span></td>
+    </tr>
+  </table>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-num">10→6</div><div class="stat-lbl" data-de="Formularfelder reduziert" data-en="Form fields reduced">Formularfelder reduziert</div></div>
+    <div class="stat-box"><div class="stat-num">69→96</div><div class="stat-lbl" data-de="SUS Score Steigerung möglich laut Pahlevi & Santoso" data-en="SUS score improvement possible per Pahlevi & Santoso">SUS Score Steigerung möglich laut Pahlevi & Santoso</div></div>
+    <div class="stat-box"><div class="stat-num">35%</div><div class="stat-lbl" data-de="Potenzielle Conversion Steigerung durch Feldreduktion laut Forschung" data-en="Potential conversion lift through field reduction per research">Potenzielle Conversion Steigerung durch Feldreduktion laut Forschung</div></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-num" data-de="05 · Was offen bleibt" data-en="05 · What Remains Open">05 · Was offen bleibt</div>
+  <div class="section-header"><h2 data-de="Grenzen dieses Projekts" data-en="Limits of This Project">Grenzen dieses Projekts</h2></div>
+  <div class="limit-box">
+    <h4 data-de="Eine ehrliche Einschätzung" data-en="An Honest Assessment">Eine ehrliche Einschätzung</h4>
+    <p data-de="Dieses Projekt ist eine heuristische Analyse und ein Designvorschlag, kein getestetes Redesign. Ich habe keine Nutzer:innen auf die Prototypen losgelassen und keine Conversion Daten. Die Zahlen aus der Forschung, die ich nenne, kommen aus anderen Kontexten und lassen sich nicht direkt übertragen." data-en="This project is a heuristic analysis and a design proposal, not a tested redesign. I didn't run any users through the prototypes and have no conversion data. The research figures I cite come from other contexts and can't be transferred directly.">Dieses Projekt ist eine heuristische Analyse und ein Designvorschlag, kein getestetes Redesign. Ich habe keine Nutzer:innen auf die Prototypen losgelassen und keine Conversion Daten. Die Zahlen aus der Forschung, die ich nenne, kommen aus anderen Kontexten und lassen sich nicht direkt übertragen.</p>
+    <p data-de="Was ich zeigen wollte ist, dass ich eine strukturierte Herangehensweise habe, bei der Designentscheidungen begründet und nicht nur nach Gefühl getroffen werden." data-en="What I wanted to show is that I have a structured approach where design decisions are justified and not just made by feeling.">Was ich zeigen wollte ist, dass ich eine strukturierte Herangehensweise habe, bei der Designentscheidungen begründet und nicht nur nach Gefühl getroffen werden.</p>
+    <div class="next-steps">
+      <div class="ns" data-de="Usability Tests mit echten Nutzer:innen auf beiden Versionen" data-en="Usability tests with real users on both versions">Usability Tests mit echten Nutzer:innen auf beiden Versionen</div>
+      <div class="ns" data-de="A/B Test zwischen Original und Redesign um tatsächliche Conversion Unterschiede zu messen" data-en="A/B test between original and redesign to measure actual conversion differences">A/B Test zwischen Original und Redesign um tatsächliche Conversion Unterschiede zu messen</div>
+      <div class="ns" data-de="Qualitative Interviews zu dem, was Nutzer:innen beim Checkout verunsichert" data-en="Qualitative interviews about what makes users uncertain during checkout">Qualitative Interviews zu dem, was Nutzer:innen beim Checkout verunsichert</div>
+      <div class="ns" data-de="Prüfung geschlechtsspezifischer Unterschiede in der Wahrnehmung des Redesigns" data-en="Examining gender specific differences in perception of the redesign">Prüfung geschlechtsspezifischer Unterschiede in der Wahrnehmung des Redesigns</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="refs">
+    <h4 data-de="Quellen" data-en="References">Quellen</h4>
+    <div class="ref-item">Adnan (2025). Qualitative study on psychological factors in shopping cart abandonment.</div>
+    <div class="ref-item">Fu, D. et al. (2026). User Interface Design Strategies For Enhancing Website Use Convenience: An A/B Experimental Evaluation Based On Usability Metrics In E-Commerce Websites. <em>International Journal of Advances in Signal and Image Sciences, 12</em>(1), 312-322. https://doi.org/10.29284/3b509779</div>
+    <div class="ref-item">Mishra, S., Guleria, A., & Parikh, V. (2025). Reducing Cognitive Load in UI Design. <em>International Journal for Research in Applied Science and Engineering Technology, 13</em>(3). https://doi.org/10.22214/ijraset.2025.67917</div>
+    <div class="ref-item">Pahlevi, R. D., & Santoso, H. B. (2026). A Usability Evaluation of an E-Commerce Checkout System Using SUS and Usability Testing. <em>International Journal of Advances in Data and Information Systems, 7</em>(1), 160-173. https://doi.org/10.59395/ijadis.v7i1.1498</div>
+    <div class="ref-item">Tarigan, E. D. S. et al. (2026). Gender Differences in Shopping Cart Abandonment: Evidence from Indonesia. <em>Journal of Consumer Sciences,</em> 125-152. https://doi.org/10.29244/jcs.11.1.125-152</div>
+    <div class="ref-item">Zenodo (2025). E-commerce checkout abandonment and hidden costs. https://doi.org/10.5281/zenodo.19882266</div>
+  </div>
+</section>
+
+<div style="text-align:center; margin: 60px 0 100px;">
+  <a href="case-study-breatheeasy.html" class="btn" data-de="Nächste Case Study" data-en="Next Case Study">Nächste Case Study</a>
+</div>
+
+</main>
+
+<footer>
+  <span data-de="© 2026 Maja · Hamburg / Remote" data-en="© 2026 Maja · Hamburg / Remote">© 2026 Maja · Hamburg / Remote</span>
+</footer>
+
+<script>
+let lang = 'de';
+const langBtn = document.getElementById('langBtn');
+function applyLang() {
+  langBtn.textContent = lang === 'de' ? 'EN' : 'DE';
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-de],[data-en]').forEach(el => {
+    const text = el.getAttribute(`data-${lang}`);
+    if (text) el.innerHTML = text;
+  });
+}
+langBtn.addEventListener('click', () => {
+  lang = lang === 'de' ? 'en' : 'de';
+  applyLang();
+});
+</script>
+</body>
+</html>
