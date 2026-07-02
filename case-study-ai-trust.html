@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KI Vertrauen – Case Study | Maja UX Research</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAFAFA; --fg: #1F1F1F; --mid: #5A5A5A; --accent: #2E5C8A;
+  --accent-soft: #EAF1F8; --light: #FFFFFF; --border: #E3E3E0;
+}
+* { box-sizing: border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--fg); line-height: 1.75; }
+h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 700; line-height: 1.15; }
+
+.skip-link { position: absolute; top: -50px; left: 20px; background: var(--accent); color: white; padding: 10px 16px; z-index: 10000; }
+.skip-link:focus { top: 10px; }
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; background: rgba(250,250,250,0.96);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border); padding: 20px 6%; display: flex; justify-content: space-between; align-items: center; z-index: 999;
+}
+.nav-logo { font-size: 24px; font-weight: 700; color: var(--fg); text-decoration: none; font-family: 'Playfair Display', serif; }
+.nav-logo span { color: var(--accent); }
+.nav-back { color: var(--mid); text-decoration: none; font-weight: 500; font-size: 15px; }
+.nav-back:hover { color: var(--accent); }
+.lang-toggle { padding: 7px 16px; border: 1px solid var(--border); border-radius: 6px; background: var(--light); cursor: pointer; font-weight: 600; font-size: 13px; }
+.lang-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.nav-right { display: flex; align-items: center; gap: 24px; }
+
+.hero { padding: 170px 6% 90px; background: var(--light); border-bottom: 1px solid var(--border); }
+.hero-inner { max-width: 1100px; margin: 0 auto; }
+.hero-tag { color: var(--accent); font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px; font-size: 13px; }
+.hero h1 { font-size: clamp(32px, 5.5vw, 50px); margin-bottom: 22px; max-width: 780px; }
+.hero p { font-size: 1.1rem; color: var(--mid); max-width: 700px; margin-bottom: 14px; }
+
+.meta-row { display: flex; flex-wrap: wrap; gap: 16px; margin: 36px 0 0; }
+.meta-item { background: var(--accent-soft); border-radius: 10px; padding: 18px 22px; flex: 1; min-width: 160px; }
+.meta-item strong { display: block; color: var(--accent); font-size: 13px; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+.meta-item span { font-size: 15px; font-weight: 600; }
+
+section { padding: 90px 6%; max-width: 1100px; margin: 0 auto; }
+.section-num { color: var(--accent); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; font-size: 13px; margin-bottom: 14px; }
+.section-header h2 { font-size: clamp(26px, 4vw, 36px); margin-bottom: 16px; }
+section p { color: var(--mid); margin-bottom: 18px; font-size: 16px; max-width: 760px; }
+section p strong { color: var(--fg); font-weight: 700; }
+
+.highlight { background: var(--accent-soft); border-left: 4px solid var(--accent); padding: 26px 30px; margin: 32px 0; border-radius: 6px; max-width: 760px; }
+.highlight strong { display: block; color: var(--accent); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.highlight p { font-family: 'Playfair Display', serif; font-style: italic; font-size: 18px; color: var(--fg); margin-bottom: 0; max-width: 100%; }
+
+.stats-row { display: flex; flex-wrap: wrap; gap: 16px; margin: 36px 0; }
+.stat-box { background: var(--light); border: 1px solid var(--border); border-radius: 10px; padding: 24px; text-align: center; flex: 1; min-width: 140px; }
+.stat-num { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--accent); }
+.stat-lbl { font-size: 12px; color: var(--mid); margin-top: 4px; line-height: 1.4; }
+
+.comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 40px 0; }
+@media(max-width: 700px) { .comparison { grid-template-columns: 1fr; } }
+.comp-card { background: var(--light); border: 1px solid var(--border); border-radius: 12px; padding: 30px; }
+.comp-card.winner { border: 2px solid var(--accent); }
+.comp-badge { display: inline-block; background: var(--accent); color: white; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; letter-spacing: .5px; text-transform: uppercase; }
+.comp-name { font-size: 22px; margin-bottom: 4px; font-family: 'Playfair Display', serif; }
+.comp-type { font-size: 13px; color: var(--mid); margin-bottom: 18px; text-transform: uppercase; letter-spacing: .5px; }
+.comp-list { list-style: none; }
+.comp-list li { font-size: 14px; color: var(--mid); padding: 9px 0; border-bottom: 1px solid var(--border); }
+.comp-list li:last-child { border-bottom: none; }
+
+.steps { display: grid; gap: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin: 40px 0; background: var(--light); }
+.step { display: grid; grid-template-columns: 70px 1fr; border-bottom: 1px solid var(--border); }
+.step:last-child { border-bottom: none; }
+.step-num { background: var(--accent-soft); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 26px; color: var(--accent); font-weight: 700; }
+.step-body { padding: 24px 28px; }
+.step-body h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+.step-body p { font-size: 13.5px; color: var(--mid); margin-bottom: 0; }
+
+.method-detail { background: var(--light); border: 1px solid var(--border); border-radius: 12px; padding: 32px; margin: 24px 0; }
+.method-detail h4 { font-size: 15.5px; margin-bottom: 12px; font-weight: 700; }
+.method-detail p { font-size: 14.5px; margin-bottom: 12px; }
+.method-detail p:last-child { margin-bottom: 0; }
+
+.stat-table { width: 100%; border-collapse: collapse; margin: 24px 0; background: var(--light); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.stat-table th, .stat-table td { padding: 14px 20px; text-align: left; font-size: 14px; border-bottom: 1px solid var(--border); }
+.stat-table th { background: var(--accent-soft); color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: .5px; }
+.stat-table tr:last-child td { border-bottom: none; }
+.stat-table td strong { color: var(--fg); }
+
+.chart-box { background: var(--light); border: 1px solid var(--border); border-radius: 12px; padding: 44px; margin: 40px 0; }
+.chart-title { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--mid); text-align: center; margin-bottom: 40px; }
+.bar-chart { display: flex; gap: 70px; justify-content: center; align-items: flex-end; height: 220px; margin-bottom: 24px; }
+.bar-group { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.bar { width: 90px; border-radius: 6px 6px 0 0; position: relative; }
+.bar.b-tom { height: 178px; background: var(--accent-soft); border: 1px solid var(--border); }
+.bar.b-assist { height: 190px; background: var(--accent); }
+.bar-val { position: absolute; top: -32px; left: 50%; transform: translateX(-50%); font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; white-space: nowrap; }
+.bar.b-tom .bar-val { color: var(--mid); }
+.bar.b-assist .bar-val { color: var(--accent); }
+.bar-lbl { font-size: 14px; font-weight: 700; }
+.bar-sub { font-size: 11px; color: var(--mid); text-transform: uppercase; letter-spacing: .5px; }
+.chart-stat { text-align: center; font-size: 13.5px; color: var(--mid); border-top: 1px solid var(--border); padding-top: 22px; }
+.chart-stat strong { color: var(--fg); font-size: 14px; }
+
+.insights { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin: 40px 0; }
+.insight { background: var(--light); border: 1px solid var(--border); border-radius: 12px; padding: 26px; }
+.insight-icon { font-size: 22px; margin-bottom: 12px; }
+.insight h4 { font-size: 14.5px; margin-bottom: 8px; font-weight: 700; }
+.insight p { font-size: 13.5px; margin-bottom: 0; }
+
+.impl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin: 40px 0; }
+.impl-item { background: var(--light); border: 1px solid var(--border); border-radius: 12px; padding: 26px; }
+.impl-num { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--accent); font-weight: 700; margin-bottom: 10px; }
+.impl-item h4 { font-size: 14px; margin-bottom: 8px; font-weight: 700; }
+.impl-item p { font-size: 13px; margin-bottom: 0; }
+
+.learnings { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin: 40px 0; }
+.learning { background: var(--light); border: 1px solid var(--border); border-radius: 12px; padding: 26px; }
+.learning-type { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+.learning p { font-size: 13.5px; margin-bottom: 0; }
+
+.ethics-box { display: flex; gap: 20px; align-items: flex-start; background: var(--light); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin: 24px 0; }
+.ethics-icon { font-size: 26px; flex-shrink: 0; }
+.ethics-box h4 { font-size: 14.5px; margin-bottom: 6px; font-weight: 700; }
+.ethics-box p { font-size: 13.5px; margin-bottom: 0; }
+
+.refs { background: var(--light); border: 1px solid var(--border); border-radius: 12px; padding: 36px; margin: 40px 0; }
+.refs h4 { font-size: 17px; margin-bottom: 20px; }
+.ref-item { font-size: 13px; color: var(--mid); padding: 12px 0; border-bottom: 1px solid var(--border); }
+.ref-item:last-child { border-bottom: none; }
+
+.btn { background: var(--accent); color: white; padding: 16px 38px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; font-size: 15px; transition: all .2s; }
+.btn:hover { background: #244a70; transform: translateY(-2px); }
+
+footer { text-align:center; padding: 70px 6%; color: var(--mid); border-top: 1px solid var(--border); font-size: 14px; }
+
+@media(max-width: 768px) {
+  nav { padding: 16px 5%; }
+  .hero { padding: 130px 6% 60px; }
+  section { padding: 60px 6%; }
+  .meta-row, .stats-row { flex-direction: column; }
+  .step { grid-template-columns: 50px 1fr; }
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Zum Hauptinhalt springen</a>
+
+<nav>
+  <a href="index.html" class="nav-logo">Maja<span>.</span></a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back" data-de="← Zurück zum Portfolio" data-en="← Back to Portfolio">← Zurück zum Portfolio</a>
+    <button class="lang-toggle" id="langBtn">EN</button>
+  </div>
+</nav>
+
+<main id="main-content">
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag" data-de="Case Study · Bachelorarbeit · Experimentelle Studie · 2024" data-en="Case Study · Bachelor's Thesis · Experimental Study · 2024">Case Study · Bachelorarbeit · Experimentelle Studie · 2024</div>
+    <h1 data-de="Sollten KI Assistenten eine Persönlichkeit haben?" data-en="Should AI Assistants Have a Personality?">Sollten KI Assistenten eine Persönlichkeit haben?</h1>
+    <p data-de="Das war die Frage hinter meiner Bachelorarbeit. Ich habe in einem experimentellen Design mit 200 Probanden untersucht, ob ein anthropomorphisierter KI Sprachassistent mehr Vertrauen erzeugt als ein neutrales System." data-en="That was the question behind my Bachelor's thesis. In an experimental design with 200 participants I examined whether an anthropomorphized AI voice assistant generates more trust than a neutral system.">Das war die Frage hinter meiner Bachelorarbeit. Ich habe in einem experimentellen Design mit 200 Probanden untersucht, ob ein anthropomorphisierter KI Sprachassistent mehr Vertrauen erzeugt als ein neutrales System.</p>
+    <p data-de="Das Ergebnis war nicht das, was ich erwartet hatte, und hat mich seitdem nicht mehr losgelassen." data-en="The result wasn't what I expected, and it has stayed with me ever since.">Das Ergebnis war nicht das, was ich erwartet hatte, und hat mich seitdem nicht mehr losgelassen.</p>
+    <div class="meta-row">
+      <div class="meta-item"><strong data-de="Rolle" data-en="Role">Rolle</strong><span data-de="Studienleiterin" data-en="Lead Researcher">Studienleiterin</span></div>
+      <div class="meta-item"><strong data-de="Zeitraum" data-en="Timeframe">Zeitraum</strong><span>Mai bis Juli 2024</span></div>
+      <div class="meta-item"><strong data-de="Stichprobe" data-en="Sample">Stichprobe</strong><span>N = 200 (von 246)</span></div>
+      <div class="meta-item"><strong data-de="Tools" data-en="Tools">Tools</strong><span>SoSci Survey · SPSS 29</span></div>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="section-num" data-de="01 · Ausgangspunkt" data-en="01 · Starting Point">01 · Ausgangspunkt</div>
+  <div class="section-header"><h2 data-de="Eine Annahme, die ich hinterfragen wollte" data-en="An Assumption I Wanted to Question">Eine Annahme, die ich hinterfragen wollte</h2></div>
+  <p data-de="Wenn man sich anschaut, wie große Tech Unternehmen ihre KI Sprachassistenten gestalten, fällt auf, dass fast alle auf Anthropomorphisierung setzen. Menschliche Namen, Persönlichkeiten, emotionale Antworten. Die Logik dahinter klingt intuitiv: wer menschlicher wirkt, wirkt auch vertrauenswürdiger." data-en="Looking at how major tech companies design their AI voice assistants, one thing stands out: almost all of them rely on anthropomorphization. Human names, personalities, emotional responses. The logic behind it sounds intuitive: something that seems more human seems more trustworthy.">Wenn man sich anschaut, wie große Tech Unternehmen ihre KI Sprachassistenten gestalten, fällt auf, dass fast alle auf Anthropomorphisierung setzen. Menschliche Namen, Persönlichkeiten, emotionale Antworten. Die Logik dahinter klingt intuitiv: wer menschlicher wirkt, wirkt auch vertrauenswürdiger.</p>
+  <p data-de="Mich hat interessiert, ob das tatsächlich so ist oder ob diese Annahme einfach nie richtig getestet wurde. Deshalb habe ich für meine Bachelorarbeit ein Between Subjects Experiment entworfen, in dem ich das direkt überprüfen konnte." data-en="I was curious whether this is actually the case, or whether this assumption has simply never been properly tested. So for my Bachelor's thesis I designed a between subjects experiment where I could directly test it.">Mich hat interessiert, ob das tatsächlich so ist oder ob diese Annahme einfach nie richtig getestet wurde. Deshalb habe ich für meine Bachelorarbeit ein Between Subjects Experiment entworfen, in dem ich das direkt überprüfen konnte.</p>
+  <div class="highlight">
+    <strong data-de="Forschungsfrage" data-en="Research Question">Forschungsfrage</strong>
+    <p data-de="Führt die Anthropomorphisierung von KI Sprachassistenten zu höherem Nutzervertrauen im Vergleich zu neutralen, nicht anthropomorphisierten Systemen?" data-en="Does anthropomorphizing AI voice assistants lead to higher user trust compared to neutral, non anthropomorphized systems?">Führt die Anthropomorphisierung von KI Sprachassistenten zu höherem Nutzervertrauen im Vergleich zu neutralen, nicht anthropomorphisierten Systemen?</p>
+  </div>
+</section>
+
+<section>
+  <div class="section-num" data-de="02 · Stichprobe und Rekrutierung" data-en="02 · Sample and Recruitment">02 · Stichprobe und Rekrutierung</div>
+  <div class="section-header"><h2 data-de="Wer hat teilgenommen und wie bin ich vorgegangen" data-en="Who Participated and How I Proceeded">Wer hat teilgenommen und wie ich vorgegangen bin</h2></div>
+  <p data-de="Die Probanden wurden über das persönliche Umfeld sowie über ein universitäres Netzwerk rekrutiert. Die Erhebung fand online statt, was eine größere Stichprobe ermöglichte." data-en="Participants were recruited through personal networks and a university network. The survey was conducted online, which allowed for a larger sample.">Die Probanden wurden über das persönliche Umfeld sowie über ein universitäres Netzwerk rekrutiert. Die Erhebung fand online statt, was eine größere Stichprobe ermöglichte.</p>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-num">246</div><div class="stat-lbl" data-de="Ursprüngliche Teilnehmerzahl" data-en="Original number of participants">Ursprüngliche Teilnehmerzahl</div></div>
+    <div class="stat-box"><div class="stat-num">200</div><div class="stat-lbl" data-de="Nach Datenbereinigung" data-en="After data cleaning">Nach Datenbereinigung</div></div>
+    <div class="stat-box"><div class="stat-num">166 / 34</div><div class="stat-lbl" data-de="Frauen und Männer" data-en="Women and men">Frauen und Männer</div></div>
+    <div class="stat-box"><div class="stat-num">101 / 99</div><div class="stat-lbl" data-de="Tom Gruppe und Assist800 Gruppe" data-en="Tom group and Assist800 group">Tom Gruppe und Assist800 Gruppe</div></div>
+  </div>
+
+  <div class="method-detail">
+    <h4 data-de="Warum 46 Probanden ausgeschlossen wurden" data-en="Why 46 Participants Were Excluded">Warum 46 Probanden ausgeschlossen wurden</h4>
+    <p data-de="Im Aufmerksamkeitsfragebogen am Ende der Erhebung gaben manche Teilnehmende an, häufig einfach etwas angeklickt zu haben, um schnell fertig zu werden, oder stark durch ihre Umgebung abgelenkt worden zu sein. Diese Personen habe ich aus dem Datensatz entfernt." data-en="In the attention check questionnaire at the end of the survey, some participants indicated they had frequently just clicked something to finish quickly, or had been strongly distracted by their environment. I removed these people from the dataset.">Im Aufmerksamkeitsfragebogen am Ende der Erhebung gaben manche Teilnehmende an, häufig einfach etwas angeklickt zu haben, um schnell fertig zu werden, oder stark durch ihre Umgebung abgelenkt worden zu sein. Diese Personen habe ich aus dem Datensatz entfernt.</p>
+    <p data-de="Zusätzlich erfasste SoSci Survey automatisch die relative Antwortgeschwindigkeit. Wer einen Wert über 2.0 hatte, wurde ebenfalls ausgeschlossen, da laut Leiner (2019) davon auszugehen ist, dass bei dieser Geschwindigkeit die Fragen nicht wirklich gelesen wurden. Drei weitere Personen wurden wegen ungültiger Altersangaben entfernt." data-en="SoSci Survey also automatically recorded relative response speed. Anyone with a value above 2.0 was excluded as well, since according to Leiner (2019) at this speed it can be assumed the questions weren't actually read. Three further participants were removed due to invalid age entries.">Zusätzlich erfasste SoSci Survey automatisch die relative Antwortgeschwindigkeit. Wer einen Wert über 2.0 hatte, wurde ebenfalls ausgeschlossen, da laut Leiner (2019) davon auszugehen ist, dass bei dieser Geschwindigkeit die Fragen nicht wirklich gelesen wurden. Drei weitere Personen wurden wegen ungültiger Altersangaben entfernt.</p>
+  </div>
+
+  <div class="ethics-box">
+    <div class="ethics-icon">🔒</div>
+    <div>
+      <h4 data-de="Forschungsethik" data-en="Research Ethics">Forschungsethik</h4>
+      <p data-de="Die Teilnahme war freiwillig und konnte jederzeit abgebrochen werden. Auf der Einleitungsseite wurden alle Teilnehmenden über Thema, Zweck, Ablauf und ungefähre Dauer informiert. Alle Daten wurden anonymisiert, vertraulich behandelt und ausschließlich für wissenschaftliche Zwecke verwendet." data-en="Participation was voluntary and could be discontinued at any time. On the introduction page all participants were informed about the topic, purpose, procedure, and approximate duration. All data was anonymized, kept confidential, and used solely for scientific purposes.">Die Teilnahme war freiwillig und konnte jederzeit abgebrochen werden. Auf der Einleitungsseite wurden alle Teilnehmenden über Thema, Zweck, Ablauf und ungefähre Dauer informiert. Alle Daten wurden anonymisiert, vertraulich behandelt und ausschließlich für wissenschaftliche Zwecke verwendet.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-num" data-de="03 · Studiendesign" data-en="03 · Study Design">03 · Studiendesign</div>
+  <div class="section-header"><h2 data-de="Zwei Assistenten, ein kontrollierter Vergleich" data-en="Two Assistants, One Controlled Comparison">Zwei Assistenten, ein kontrollierter Vergleich</h2></div>
+  <p data-de="Das Experiment folgte einem Between Subjects Design mit zwei Bedingungen. Die Probanden wurden zufällig einer der beiden Gruppen zugeteilt, ohne dass sie darüber informiert wurden." data-en="The experiment followed a between subjects design with two conditions. Participants were randomly assigned to one of the two groups without being informed about this.">Das Experiment folgte einem Between Subjects Design mit zwei Bedingungen. Die Probanden wurden zufällig einer der beiden Gruppen zugeteilt, ohne dass sie darüber informiert wurden.</p>
+
+  <div class="comparison">
+    <div class="comp-card">
+      <div class="comp-name">Tom</div>
+      <div class="comp-type" data-de="Anthropomorphisiert" data-en="Anthropomorphized">Anthropomorphisiert</div>
+      <ul class="comp-list">
+        <li data-de="Menschlicher Name" data-en="Human name">Menschlicher Name</li>
+        <li data-de="Geäußerte eigene Interessen" data-en="Expressed personal interests">Geäußerte eigene Interessen</li>
+        <li data-de="Emotionale Antworten" data-en="Emotional responses">Emotionale Antworten</li>
+        <li data-de="Persönlicher Bezug zum Nutzer" data-en="Personal connection to user">Persönlicher Bezug zum Nutzer</li>
+      </ul>
+    </div>
+    <div class="comp-card winner">
+      <div class="comp-badge" data-de="Höheres Vertrauen gemessen" data-en="Higher trust measured">Höheres Vertrauen gemessen</div>
+      <div class="comp-name">Assist800</div>
+      <div class="comp-type" data-de="Neutral" data-en="Neutral">Neutral</div>
+      <ul class="comp-list">
+        <li data-de="Technischer Name" data-en="Technical name">Technischer Name</li>
+        <li data-de="Keine geäußerten Interessen" data-en="No expressed interests">Keine geäußerten Interessen</li>
+        <li data-de="Sachliche Antworten" data-en="Factual responses">Sachliche Antworten</li>
+        <li data-de="Kein persönlicher Bezug" data-en="No personal connection">Kein persönlicher Bezug</li>
+      </ul>
+    </div>
+  </div>
+
+  <p data-de="Beide Szenarien waren bis auf die Antwortweise des jeweiligen Assistenten identisch. In einem Szenario suchten die Teilnehmenden eine Filmempfehlung, im anderen eine Wegbeschreibung zu einem Vorstellungsgespräch am nächsten Morgen. Das Lesen eines Szenarios hätte nicht länger als zwei Minuten dauern sollen." data-en="Both scenarios were identical apart from the respective assistant's way of responding. In one scenario participants were looking for a film recommendation, in the other for directions to a job interview the next morning. Reading a scenario was designed to take no longer than two minutes.">Beide Szenarien waren bis auf die Antwortweise des jeweiligen Assistenten identisch. In einem Szenario suchten die Teilnehmenden eine Filmempfehlung, im anderen eine Wegbeschreibung zu einem Vorstellungsgespräch am nächsten Morgen. Das Lesen eines Szenarios hätte nicht länger als zwei Minuten dauern sollen.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h4 data-de="Szenario lesen" data-en="Read Scenario">Szenario lesen</h4>
+        <p data-de="Alle Teilnehmenden lasen eines der beiden Szenarien. Die Zuteilung erfolgte zufällig und wurde nicht kommuniziert." data-en="All participants read one of the two scenarios. Assignment was random and not communicated.">Alle Teilnehmenden lasen eines der beiden Szenarien. Die Zuteilung erfolgte zufällig und wurde nicht kommuniziert.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h4 data-de="TiA Fragebogen ausfüllen" data-en="Complete TiA Questionnaire">TiA Fragebogen ausfüllen</h4>
+        <p data-de="Im Anschluss beantworteten alle Teilnehmenden den Trust in Automation Fragebogen von Körber (2019), 19 Items auf einer fünfstufigen Likert Skala. Jede Frage musste beantwortet werden." data-en="Afterwards all participants completed the Trust in Automation questionnaire by Körber (2019), 19 items on a five point Likert scale. Every question had to be answered.">Im Anschluss beantworteten alle Teilnehmenden den Trust in Automation Fragebogen von Körber (2019), 19 Items auf einer fünfstufigen Likert Skala. Jede Frage musste beantwortet werden.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h4 data-de="Aufmerksamkeitsfragebogen" data-en="Attention Check">Aufmerksamkeitsfragebogen</h4>
+        <p data-de="Am Ende wurde erfasst, ob das Szenario aufmerksam gelesen und der Fragebogen wahrheitsgemäß beantwortet wurde, und wie stark die Ablenkung durch die Umgebung war." data-en="At the end it was recorded whether the scenario had been read attentively and the questionnaire answered honestly, and how strongly participants had been distracted by their surroundings.">Am Ende wurde erfasst, ob das Szenario aufmerksam gelesen und der Fragebogen wahrheitsgemäß beantwortet wurde, und wie stark die Ablenkung durch die Umgebung war.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h4 data-de="Auswertung mit SPSS" data-en="Analysis with SPSS">Auswertung mit SPSS</h4>
+        <p data-de="Die Daten wurden mit SPSS Version 29 ausgewertet. Vor dem eigentlichen t Test habe ich die nötigen Voraussetzungen geprüft." data-en="The data was analysed with SPSS Version 29. Before the actual t test I checked the necessary assumptions.">Die Daten wurden mit SPSS Version 29 ausgewertet. Vor dem eigentlichen t Test habe ich die nötigen Voraussetzungen geprüft.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-detail">
+    <h4 data-de="Zum TiA Fragebogen" data-en="On the TiA Questionnaire">Zum TiA Fragebogen</h4>
+    <p data-de="Der Trust in Automation Fragebogen von Körber (2019) misst fünf Dimensionen des Vertrauens in automatisierte Systeme, darunter Reliabilität und Kompetenz, Verständlichkeit und Vorhersagbarkeit, Vertrautheit und generelle Vertrauensneigung. Die Subskalen zeigen Reliabilitätskoeffizienten zwischen α = .78 und α = .92 (Körber, 2021)." data-en="The Trust in Automation questionnaire by Körber (2019) measures five dimensions of trust in automated systems, including reliability and competence, understandability and predictability, familiarity and general propensity to trust. The subscales show reliability coefficients between α = .78 and α = .92 (Körber, 2021).">Der Trust in Automation Fragebogen von Körber (2019) misst fünf Dimensionen des Vertrauens in automatisierte Systeme, darunter Reliabilität und Kompetenz, Verständlichkeit und Vorhersagbarkeit, Vertrautheit und generelle Vertrauensneigung. Die Subskalen zeigen Reliabilitätskoeffizienten zwischen α = .78 und α = .92 (Körber, 2021).</p>
+    <p data-de="Ich habe den Fragebogen in einer Metaanalyse von Razin und Feigh (2023) als valide und reliabel eingestuft gefunden und ihn deshalb als Erhebungsinstrument gewählt. Für diese Studie wurde die Subskala zur Intention der Entwickler ausgeschlossen, da diese im Studiendesign nicht erläutert wurde und das Ergebnis hätte verzerren können. Drei weitere Items wurden entfernt, weil sie für das Forschungsdesign nicht passend waren." data-en="I found the questionnaire rated as valid and reliable in a meta analysis by Razin and Feigh (2023) and chose it as the measurement instrument for this reason. For this study the developer intention subscale was excluded since it wasn't explained in the study design and could have biased the results. Three further items were removed because they weren't appropriate for the research design.">Ich habe den Fragebogen in einer Metaanalyse von Razin und Feigh (2023) als valide und reliabel eingestuft gefunden und ihn deshalb als Erhebungsinstrument gewählt. Für diese Studie wurde die Subskala zur Intention der Entwickler ausgeschlossen, da diese im Studiendesign nicht erläutert wurde und das Ergebnis hätte verzerren können. Drei weitere Items wurden entfernt, weil sie für das Forschungsdesign nicht passend waren.</p>
+  </div>
+</section>
+
+<section>
+  <div class="section-num" data-de="04 · Statistische Auswertung" data-en="04 · Statistical Analysis">04 · Statistische Auswertung</div>
+  <div class="section-header"><h2 data-de="Voraussetzungen prüfen, dann auswerten" data-en="Check Assumptions, Then Analyse">Voraussetzungen prüfen, dann auswerten</h2></div>
+  <p data-de="Vor dem t Test für unabhängige Stichproben habe ich die nötigen Voraussetzungen geprüft, also Varianzhomogenität und Normalverteilung. Beides war erfüllt." data-en="Before the independent samples t test I checked the necessary assumptions, meaning homogeneity of variance and normal distribution. Both were met.">Vor dem t Test für unabhängige Stichproben habe ich die nötigen Voraussetzungen geprüft, also Varianzhomogenität und Normalverteilung. Beides war erfüllt.</p>
+
+  <table class="stat-table">
+    <tr>
+      <th data-de="Test" data-en="Test">Test</th>
+      <th data-de="Zweck" data-en="Purpose">Zweck</th>
+      <th data-de="Ergebnis" data-en="Result">Ergebnis</th>
+    </tr>
+    <tr>
+      <td><strong>Levene Test</strong></td>
+      <td data-de="Varianzhomogenität" data-en="Homogeneity of variance">Varianzhomogenität</td>
+      <td>F(1, 198) = 0.11, p = .74</td>
+    </tr>
+    <tr>
+      <td><strong>Shapiro Wilk</strong></td>
+      <td data-de="Normalverteilung" data-en="Normal distribution">Normalverteilung</td>
+      <td>p = .80</td>
+    </tr>
+    <tr>
+      <td><strong>t Test</strong></td>
+      <td data-de="Mittelwertunterschied" data-en="Mean difference">Mittelwertunterschied</td>
+      <td>t(198) = −2.37, p = .009</td>
+    </tr>
+  </table>
+
+  <div class="chart-box">
+    <div class="chart-title" data-de="Trust in Automation Score (TiA) · Mittelwerte beider Gruppen" data-en="Trust in Automation Score (TiA) · Means of Both Groups">Trust in Automation Score (TiA) · Mittelwerte beider Gruppen</div>
+    <div class="bar-chart">
+      <div class="bar-group">
+        <div class="bar b-tom"><div class="bar-val">M = 2.85</div></div>
+        <div class="bar-lbl">Tom</div>
+        <div class="bar-sub">SD = 0.52</div>
+      </div>
+      <div class="bar-group">
+        <div class="bar b-assist"><div class="bar-val">M = 3.03</div></div>
+        <div class="bar-lbl">Assist800</div>
+        <div class="bar-sub">SD = 0.53</div>
+      </div>
+    </div>
+    <div class="chart-stat">
+      <strong>t(198) = −2.37 · p = .009 · Cohen's d = −0.34</strong><br>
+      <span data-de="Signifikanter Unterschied zugunsten von Assist800, kleiner bis mittlerer Effekt" data-en="Significant difference in favour of Assist800, small to medium effect">Signifikanter Unterschied zugunsten von Assist800, kleiner bis mittlerer Effekt</span>
+    </div>
+  </div>
+
+  <p data-de="Die Assist800 Gruppe erzielte im Durchschnitt einen höheren TiA Wert (M = 3.03, SD = 0.53) als die Tom Gruppe (M = 2.85, SD = 0.52). Der Unterschied ist statistisch signifikant, p = .009, und weist laut Cohen's d = −0.34 auf einen kleinen bis mittleren Effekt hin." data-en="The Assist800 group achieved a higher average TiA score (M = 3.03, SD = 0.53) than the Tom group (M = 2.85, SD = 0.52). The difference is statistically significant, p = .009, and according to Cohen's d = −0.34 indicates a small to medium effect.">Die Assist800 Gruppe erzielte im Durchschnitt einen höheren TiA Wert (M = 3.03, SD = 0.53) als die Tom Gruppe (M = 2.85, SD = 0.52). Der Unterschied ist statistisch signifikant, p = .009, und weist laut Cohen's d = −0.34 auf einen kleinen bis mittleren Effekt hin.</p>
+  <p data-de="Das bedeutet, dass die Probanden dem neutralen System tendenziell etwas mehr Vertrauen entgegengebracht haben als dem anthropomorphisierten. Cohen's d = −0.34 ist kein besonders großer Effekt, aber er ist groß genug, um relevant zu sein, besonders wenn man bedenkt, dass sich kleine Unterschiede über Millionen von Nutzenden skalieren." data-en="This means participants tended to show somewhat more trust towards the neutral system than the anthropomorphized one. Cohen's d = −0.34 isn't a particularly large effect, but it's large enough to be relevant, especially considering that small differences scale across millions of users.">Das bedeutet, dass die Probanden dem neutralen System tendenziell etwas mehr Vertrauen entgegengebracht haben als dem anthropomorphisierten. Cohen's d = −0.34 ist kein besonders großer Effekt, aber er ist groß genug, um relevant zu sein, besonders wenn man bedenkt, dass sich kleine Unterschiede über Millionen von Nutzenden skalieren.</p>
+</section>
+
+<section>
+  <div class="section-num" data-de="05 · Mögliche Erklärungen" data-en="05 · Possible Explanations">05 · Mögliche Erklärungen</div>
+  <div class="section-header"><h2 data-de="Was hinter dem Ergebnis stecken könnte" data-en="What Might Lie Behind the Result">Was hinter dem Ergebnis stecken könnte</h2></div>
+  <p data-de="Die Frage, warum der neutrale Assistent besser abschneidet, lässt sich mit dem vorliegenden Design nicht endgültig beantworten. Einige Erklärungen aus der Literatur erscheinen mir aber plausibel." data-en="The question of why the neutral assistant performed better can't be definitively answered with the present design. Some explanations from the literature do seem plausible to me though.">Die Frage, warum der neutrale Assistent besser abschneidet, lässt sich mit dem vorliegenden Design nicht endgültig beantworten. Einige Erklärungen aus der Literatur erscheinen mir aber plausibel.</p>
+
+  <div class="insights">
+    <div class="insight">
+      <div class="insight-icon">🎭</div>
+      <h4 data-de="Uncanny Valley" data-en="Uncanny Valley">Uncanny Valley</h4>
+      <p data-de="Tom wirkte menschlich, aber nicht menschlich genug. Moris Theorie zum Uncanny Valley beschreibt genau dieses Phänomen: im Bereich zwischen eindeutig maschinell und überzeugend menschlich entsteht Unbehagen statt Sympathie." data-en="Tom seemed human, but not human enough. Mori's uncanny valley theory describes exactly this phenomenon: in the zone between clearly mechanical and convincingly human, discomfort arises rather than sympathy.">Tom wirkte menschlich, aber nicht menschlich genug. Moris Theorie zum Uncanny Valley beschreibt genau dieses Phänomen: im Bereich zwischen eindeutig maschinell und überzeugend menschlich entsteht Unbehagen statt Sympathie.</p>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">🎯</div>
+      <h4 data-de="Neutralität als Objektivität" data-en="Neutrality as Objectivity">Neutralität als Objektivität</h4>
+      <p data-de="Es wäre denkbar, dass Assist800 als sachlicher und objektiver wahrgenommen wurde. Ohne Persönlichkeit wirkt ein System vielleicht weniger manipulierbar und dadurch glaubwürdiger." data-en="It seems plausible that Assist800 was perceived as more factual and objective. Without a personality a system might appear less manipulable and therefore more credible.">Es wäre denkbar, dass Assist800 als sachlicher und objektiver wahrgenommen wurde. Ohne Persönlichkeit wirkt ein System vielleicht weniger manipulierbar und dadurch glaubwürdiger.</p>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">⚠️</div>
+      <h4 data-de="Wahrgenommene Täuschung" data-en="Perceived Deception">Wahrgenommene Täuschung</h4>
+      <p data-de="Die Probanden wussten, dass es sich um eine Studie handelt, und damit möglicherweise auch, dass Toms Persönlichkeit simuliert ist. Das könnte das Vertrauen aktiv unterhöhlt haben." data-en="Participants knew they were in a study, and might therefore also have suspected that Tom's personality was simulated. This could have actively undermined trust.">Die Probanden wussten, dass es sich um eine Studie handelt, und damit möglicherweise auch, dass Toms Persönlichkeit simuliert ist. Das könnte das Vertrauen aktiv unterhöhlt haben.</p>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">📊</div>
+      <h4 data-de="Kontextabhängigkeit" data-en="Context Dependence">Kontextabhängigkeit</h4>
+      <p data-de="Beide Szenarien waren aufgabenorientiert. In anderen Kontexten, etwa bei emotionalem Support, könnten anthropomorphisierte Assistenten möglicherweise besser abschneiden. Das lässt sich mit diesem Design nicht klären." data-en="Both scenarios were task oriented. In other contexts, such as emotional support, anthropomorphized assistants might possibly perform better. This can't be resolved with the present design.">Beide Szenarien waren aufgabenorientiert. In anderen Kontexten, etwa bei emotionalem Support, könnten anthropomorphisierte Assistenten möglicherweise besser abschneiden. Das lässt sich mit diesem Design nicht klären.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-num" data-de="06 · Was das für Design bedeuten könnte" data-en="06 · What This Might Mean for Design">06 · Was das für Design bedeuten könnte</div>
+  <div class="section-header"><h2 data-de="Vorsichtige Schlussfolgerungen" data-en="Cautious Conclusions">Vorsichtige Schlussfolgerungen</h2></div>
+  <p data-de="Ich würde aus diesem Ergebnis keine universellen Designregeln ableiten. Dazu ist der Effekt zu klein und der Kontext zu spezifisch. Aber es gibt ein paar Überlegungen, die ich für sinnvoll halte." data-en="I wouldn't derive universal design rules from this result. The effect is too small for that and the context too specific. But there are a few considerations I find worthwhile.">Ich würde aus diesem Ergebnis keine universellen Designregeln ableiten. Dazu ist der Effekt zu klein und der Kontext zu spezifisch. Aber es gibt ein paar Überlegungen, die ich für sinnvoll halte.</p>
+
+  <div class="impl-grid">
+    <div class="impl-item">
+      <div class="impl-num">01</div>
+      <h4 data-de="Klarheit über simulierte Menschlichkeit" data-en="Clarity Over Simulated Humanity">Klarheit über simulierte Menschlichkeit</h4>
+      <p data-de="KI Systeme, die klar kommunizieren was sie sind, könnten in aufgabenorientierten Kontexten vertrauenswürdiger wirken als solche, die Menschlichkeit simulieren." data-en="AI systems that clearly communicate what they are might seem more trustworthy in task oriented contexts than those that simulate humanity.">KI Systeme, die klar kommunizieren was sie sind, könnten in aufgabenorientierten Kontexten vertrauenswürdiger wirken als solche, die Menschlichkeit simulieren.</p>
+    </div>
+    <div class="impl-item">
+      <div class="impl-num">02</div>
+      <h4 data-de="Kontext mitdenken" data-en="Consider Context">Kontext mitdenken</h4>
+      <p data-de="Die Frage ob Anthropomorphisierung sinnvoll ist, lässt sich vermutlich nicht pauschal beantworten. Es kommt auf den Nutzungskontext an, wofür das System eingesetzt wird und welche Erwartungen Nutzende mitbringen." data-en="The question of whether anthropomorphization makes sense probably can't be answered in general. It depends on the usage context, what the system is being used for, and what expectations users bring with them.">Die Frage ob Anthropomorphisierung sinnvoll ist, lässt sich vermutlich nicht pauschal beantworten. Es kommt auf den Nutzungskontext an, wofür das System eingesetzt wird und welche Erwartungen Nutzende mitbringen.</p>
+    </div>
+    <div class="impl-item">
+      <div class="impl-num">03</div>
+      <h4 data-de="Annahmen testen statt übernehmen" data-en="Test Assumptions Rather Than Adopt Them">Annahmen testen statt übernehmen</h4>
+      <p data-de="Das Ergebnis zeigt vor allem, wie wichtig es ist, auch intuitiv plausible Designannahmen empirisch zu überprüfen, statt sie einfach zu übernehmen, weil sie sich gut anfühlen." data-en="The result shows above all how important it is to empirically check even intuitively plausible design assumptions, rather than simply adopting them because they feel right.">Das Ergebnis zeigt vor allem, wie wichtig es ist, auch intuitiv plausible Designannahmen empirisch zu überprüfen, statt sie einfach zu übernehmen, weil sie sich gut anfühlen.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-num" data-de="07 · Was ich mitgenommen habe" data-en="07 · What I Took Away">07 · Was ich mitgenommen habe</div>
+  <div class="section-header"><h2 data-de="Rückblick auf das Projekt" data-en="Looking Back on the Project">Rückblick auf das Projekt</h2></div>
+  <div class="learnings">
+    <div class="learning">
+      <div class="learning-type" data-de="Methodisch" data-en="Methodological">Methodisch</div>
+      <p data-de="Ich habe das erste Mal mit einer größeren Stichprobe gearbeitet und dabei gelernt, wie wichtig sorgfältige Datenbereinigung, Voraussetzungsprüfung und Qualitätskontrolle sind. Das klingt selbstverständlich, ist aber im echten Einsatz aufwändiger als erwartet." data-en="I worked with a larger sample for the first time and in doing so learned how important careful data cleaning, assumption checking, and quality control are. That sounds obvious, but in practice it's more demanding than expected.">Ich habe das erste Mal mit einer größeren Stichprobe gearbeitet und dabei gelernt, wie wichtig sorgfältige Datenbereinigung, Voraussetzungsprüfung und Qualitätskontrolle sind. Das klingt selbstverständlich, ist aber im echten Einsatz aufwändiger als erwartet.</p>
+    </div>
+    <div class="learning">
+      <div class="learning-type" data-de="Inhaltlich" data-en="Substantive">Inhaltlich</div>
+      <p data-de="Psychologische Theorien wie das Uncanny Valley oder die Media Equation sind keine rein akademischen Konzepte. Sie können helfen zu erklären, warum Menschen auf bestimmte Designentscheidungen so reagieren wie sie es tun, auch wenn man nie vollständige Gewissheit hat." data-en="Psychological theories like the uncanny valley or the media equation aren't purely academic concepts. They can help explain why people respond to certain design decisions the way they do, even if one never has complete certainty.">Psychologische Theorien wie das Uncanny Valley oder die Media Equation sind keine rein akademischen Konzepte. Sie können helfen zu erklären, warum Menschen auf bestimmte Designentscheidungen so reagieren wie sie es tun, auch wenn man nie vollständige Gewissheit hat.</p>
+    </div>
+    <div class="learning">
+      <div class="learning-type" data-de="Persönlich" data-en="Personal">Persönlich</div>
+      <p data-de="Das unerwartete Ergebnis war das Interessanteste an dem ganzen Projekt. Es hat mich neugierig gemacht auf die Frage, unter welchen Bedingungen Menschen neuer Technologie vertrauen und warum, und das ist seitdem mein Thema geblieben." data-en="The unexpected result was the most interesting thing about the whole project. It made me curious about the question of under what conditions people trust new technology and why, and that has remained my topic ever since.">Das unerwartete Ergebnis war das Interessanteste an dem ganzen Projekt. Es hat mich neugierig gemacht auf die Frage, unter welchen Bedingungen Menschen neuer Technologie vertrauen und warum, und das ist seitdem mein Thema geblieben.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="refs">
+    <h4 data-de="Quellen" data-en="References">Quellen</h4>
+    <div class="ref-item">Körber, M. (2019). Theoretical considerations and development of a questionnaire to measure trust in automation. <em>Proceedings of the 20th Congress of the International Ergonomics Association.</em></div>
+    <div class="ref-item">Körber, M. (2021). Vertrauen in Automation. Skalendokumentation.</div>
+    <div class="ref-item">Razin, Y. S., & Feigh, K. M. (2023). Toward trustworthy automation: A meta-analysis of trust questionnaires.</div>
+    <div class="ref-item">Leiner, D. J. (2019). Too fast, too straight, too weird: Non-reactive indicators for meaningless data in internet surveys.</div>
+  </div>
+</section>
+
+<div style="text-align:center; margin: 60px 0 100px;">
+  <a href="case-checkout-figma.html" class="btn" data-de="Nächste Case Study" data-en="Next Case Study">Nächste Case Study</a>
+</div>
+
+</main>
+
+<footer>
+  <span data-de="© 2026 Maja · Hamburg / Remote" data-en="© 2026 Maja · Hamburg / Remote">© 2026 Maja · Hamburg / Remote</span>
+</footer>
+
+<script>
+let lang = 'de';
+const langBtn = document.getElementById('langBtn');
+function applyLang() {
+  langBtn.textContent = lang === 'de' ? 'EN' : 'DE';
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-de],[data-en]').forEach(el => {
+    const text = el.getAttribute(`data-${lang}`);
+    if (text) el.innerHTML = text;
+  });
+}
+langBtn.addEventListener('click', () => {
+  lang = lang === 'de' ? 'en' : 'de';
+  applyLang();
+});
+</script>
+</body>
+</html>
